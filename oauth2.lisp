@@ -3,7 +3,7 @@
   (:export :request-code :request-token :request-resource :refresh-token
            :authorization-error :error-code :error-body
            :token-string :token-type :token-expires-in
-           :token-refresh-token :token-scope)
+           :token-refresh-token :token-scope :token-from-string)
   (:documentation
    "This package contains a fairly low-level implementation of the OAUTH2 protocol.
 It currently only supports \"Authorization Code Grant\" (section 4.1 if the draft)
@@ -103,6 +103,10 @@ it will be one of the following:
   (refresh-token nil :type (or null string))
   (scope nil :type (or null string)))
 
+(defun string->token (string &key expires-in refresh-token scope)
+  "Construct a new token from a token-string"
+  (make-token :string string :type "Bearer"
+              :expires-in expires-in :refresh-token refresh-token :scope scope))
 
 (defmacro with-handle-token (token)
   "Handle the return value you get from a request for a token. Used by request-token and refresh-token."
